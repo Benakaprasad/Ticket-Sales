@@ -1,78 +1,66 @@
-// Initialize the queues
-let groupQueue = [];
+// Priority queue for VIP Pass
+let vipQueue = [];
 let individualQueue = [];
+const VIP_LIMIT = 50;  // Set the limit for VIP passes
 
-// Group Reservation
-function reserveGroup() {
-    const groupName = document.getElementById('groupName').value.trim();
-    const groupSize = parseInt(document.getElementById('groupSize').value);
+document.getElementById('reservation-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const passType = document.getElementById('pass-type').value;
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
 
-    if (groupName && groupSize > 0) {
-        groupQueue.push({ groupName, groupSize });
-        updateQueueDisplay();
-        document.getElementById('status').textContent = `${groupName} (${groupSize} members) added to the group reservation queue.`;
-        
-        // Clear the input fields after reservation
-        document.getElementById('groupName').value = '';
-        document.getElementById('groupSize').value = '';
+    if (passType === 'vip') {
+        if (vipQueue.length < VIP_LIMIT) {
+            vipQueue.push({ name, email });
+            alert(`${name} has been added to the VIP queue.`);
+        } else {
+            alert("Sorry, the VIP passes have been sold out!");
+        }
     } else {
-        document.getElementById('status').textContent = "Please enter a valid group name and size.";
-    }
-}
-
-// Individual Reservation
-function reserveIndividual() {
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-
-    if (name && email) {
         individualQueue.push({ name, email });
-        updateQueueDisplay();
-        document.getElementById('status').textContent = `${name} (${email}) reserved a ticket successfully.`;
-        
-        // Clear the input fields after reservation
-        document.getElementById('name').value = '';
-        document.getElementById('email').value = '';
-    } else {
-        document.getElementById('status').textContent = "Please enter both your name and email.";
+        alert(`${name} has been added to the Individual queue.`);
     }
-}
 
-// Sell Ticket (for simplicity, we just remove the first individual in the queue)
-function sellTicket() {
-    if (individualQueue.length > 0) {
-        const soldTicket = individualQueue.shift();
-        updateQueueDisplay();
-        document.getElementById('status').textContent = `${soldTicket.name} sold their ticket.`;
-    } else {
-        document.getElementById('status').textContent = "No tickets to sell.";
-    }
-}
+    document.getElementById('reservation-form').reset();
+});
 
-// Update the Queue Display
-function updateQueueDisplay() {
-    const queueList = document.getElementById('queueList');
-    queueList.innerHTML = ""; // Clear the queue list
-
-    // Display Group Queue
-    groupQueue.forEach((group, index) => {
+// Admin Panel functions
+document.getElementById('show-queue').addEventListener('click', function() {
+    const queueList = document.getElementById('queue-list');
+    queueList.innerHTML = '';
+    
+    // Show VIP Queue first
+    vipQueue.forEach(person => {
         const li = document.createElement('li');
-        li.textContent = `${index + 1}. Group: ${group.groupName} (${group.groupSize} members)`;
+        li.textContent = `VIP: ${person.name} (${person.email})`;
         queueList.appendChild(li);
     });
 
-    // Display Individual Queue
-    individualQueue.forEach((individual, index) => {
+    // Show Individual Queue
+    individualQueue.forEach(person => {
         const li = document.createElement('li');
-        li.textContent = `${index + 1}. Individual: ${individual.name} (${individual.email})`;
+        li.textContent = `Individual: ${person.name} (${person.email})`;
         queueList.appendChild(li);
     });
-}
+});
 
-// Reset the Queue (Admin only)
-function resetQueue() {
-    groupQueue = [];
+// Sell Ticket functionality
+document.getElementById('sell-ticket').addEventListener('click', function() {
+    if (vipQueue.length > 0) {
+        const soldPerson = vipQueue.shift(); // Priority to VIP
+        alert(`Ticket sold to VIP: ${soldPerson.name}`);
+    } else if (individualQueue.length > 0) {
+        const soldPerson = individualQueue.shift(); // Then sell to individual
+        alert(`Ticket sold to: ${soldPerson.name}`);
+    } else {
+        alert("No tickets available to sell.");
+    }
+});
+
+// Reset Queue functionality
+document.getElementById('reset-queue').addEventListener('click', function() {
+    vipQueue = [];
     individualQueue = [];
-    updateQueueDisplay();
-    document.getElementById('status').textContent = "The queue has been reset.";
-}
+    document.getElementById('queue-list').innerHTML = '';
+    alert("Queue has been reset.");
+});
