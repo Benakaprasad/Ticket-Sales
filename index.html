@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcast Stars - Ticket Reservation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Podcast Stars - Ticket Reservation</h1>
+
+        <div id="status" class="status"></div>
+
+        <!-- Group Reservation Section -->
+        <div class="reservation-section">
+            <h2>Group Reservation</h2>
+            <input type="text" id="groupName" placeholder="Enter group name" />
+            <input type="number" id="groupSize" placeholder="Enter group size" min="1" />
+            <button onclick="reserveGroup()">Reserve as Group</button>
+        </div>
+
+        <!-- Individual Reservation Section -->
+        <div class="individual-section">
+            <h2>Individual Reservation</h2>
+            <input type="text" id="name" placeholder="Enter your name" />
+            <input type="email" id="email" placeholder="Enter your email" />
+            <button onclick="reserveIndividual()">Reserve Ticket</button>
+            <button onclick="sellTicket()">Sell Ticket</button>
+        </div>
+
+        <!-- Queue Display Section -->
+        <div class="queue-display">
+            <h2>Current Queue</h2>
+            <ul id="queueList"></ul>
+        </div>
+
+        <!-- Admin Panel for Reset -->
+        <div class="admin-panel">
+            <h2>Admin Panel</h2>
+            <button onclick="resetQueue()">Reset Queue</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
