@@ -2,6 +2,7 @@
 -This ticket sales reservation system is designed for various event platforms such as concerts, stadiums, and convention centers. It supports two ticket modes to provide flexible access options for attendees:
 
 -Ticket Modes
+
 1.Individual Pass:
 Standard tickets available on a first-come, first-served basis.
 
